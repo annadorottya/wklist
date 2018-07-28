@@ -2,7 +2,7 @@
 
 This python script splits a given kanji list to WaniKani levels. The script works the following way:
 1. Create an `api_key` file with your v1 api key in it. Make sure to have only one line in the file.
-2. Run the script as `python main.sh L`, where `L` is one of the followings: `n5`, `n4`, `n3`, `n2`, `n1`, `genki`, `tobira-pre`.
+2. Run the script as `python main.sh L`, where `L` is one of the followings: `n5`, `n4`, `n3`, `n2`, `n1`, `genki`, `tobira-pre` and `tobira`.
 
 ## More development in the near future
 - It will somehow interact based on your level, eg. gives back only the unlearnt part.
