@@ -2,7 +2,8 @@
 
 The `list.py` python script splits a given kanji list to WaniKani levels. The script works the following way:
 1. Create an `api_key` file with your v1 api key in it. Make sure to have only one line in the file.
-2. Run the script as `python list.py L`, where `L` is one of the followings: `n5`, `n4`, `n3`, `n2`, `n1`, `genki`, `tobira-pre` and `tobira`.
+2. Run the script as `python list.py L`, where `L` is one of the followings: `n5`, `n4`, `n3`, `n2`, `n1`, `genki`, `tobira-pre`, `tobira` and `shiru-i` where i is a number between 1-11.
+To create your own list of kanji out of text I recommend using the `text_to_kanjilist.py` script, which strips hiragana, katakana, latin alphabet, and removes repeating kanji.
 
 ## More development in the near future
 - It will somehow interact based on your level, eg. gives back only the unlearnt part.
@@ -23,4 +24,5 @@ The script works the following way:
 1. Create an `api2_key` file with your v2 api key in it. Make sure to have only one line in the file.
 2. Run the script as `python list.py`, and wait. It will take a while...
 
-Or, alternatively, you can look up the result of the script that I ran on 2018-08-19 in `shortlevels.txt`.
+Or, alternatively, you can look up the result of the script that I ran on 2018-08-19 in `shortlevels_2018_08_19.txt`. 
+The new short levels are in `shortlevels_2018_12_06.txt`. Unfortunately I do not have a subscription anymore (since April 2019), so if there is any changes in that, please PR me the new output, thank you!
