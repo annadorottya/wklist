@@ -24,5 +24,7 @@ The script works the following way:
 1. Create an `api2_key` file with your v2 api key in it. Make sure to have only one line in the file.
 2. Run the script as `python list.py`, and wait. It will take a while...
 
-Or, alternatively, you can look up the result of the script that I ran on 2018-08-19 in `shortlevels_2018_08_19.txt`. 
-The new short levels are in `shortlevels_2018_12_06.txt`. Unfortunately I do not have a subscription anymore (since April 2019), so if there is any changes in that, please PR me the new output, thank you!
+Or, alternatively, you can look up the result of the script that I ran on 2019-12-19 in `shortlevels_2019_12_19.txt`. 
+For historical reasons I kept the old results as well, `shortlevels_2018_08_19.txt` and `shortlevels_2018_12_06.txt`.
+
+Now go and do some reviews instead of calculating your possibilites!
