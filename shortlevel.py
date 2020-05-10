@@ -39,9 +39,9 @@ for l in range(1,61):
 			second_wave[l] += i["data"]["characters"]
 		else:
 			first_wave[l] += i["data"]["characters"]
-	print "Level " + str(l) + " 1st wave: " + first_wave[l] + " (total count: " + str(len(first_wave[l])) + ")"
-	print "Level " + str(l) + " 2nd wave: " + second_wave[l] + " (total count: " + str(len(second_wave[l])) + ")"	
+	print("Level " + str(l) + " 1st wave: " + first_wave[l] + " (total count: " + str(len(first_wave[l])) + ")")
+	print("Level " + str(l) + " 2nd wave: " + second_wave[l] + " (total count: " + str(len(second_wave[l])) + ")")	
 	if len(first_wave[l]) >= (len(first_wave[l]) + len(second_wave[l]))*0.9:
-		print "Level " + str(l) + " is a short level!"
+		print("Level " + str(l) + " is a short level!")
 		shortlevels.append(l)
-print "Short levels are: " + str(shortlevels)
+print("Short levels are: " + str(shortlevels))

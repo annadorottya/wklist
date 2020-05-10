@@ -15,6 +15,12 @@ file = open("api_key","r")
 api_key = file.read()
 file.close()
 
+file = open("api2_key","r")
+api2_key = file.read()
+file.close()
+
+headers = {'Authorization': 'Bearer ' + api2_key}
+
 n5_kanji = u"日一国人年大十二本中長出三時行見月後前生五間上東四今金九入学高円子外八六下来気小七山話女北午百書先名川千水半男西電校語土木聞食車何南万毎白天母火右読友左休父雨"
 n4_kanji = u"会同事自社発者地業方新場員立開手力問代明動京目通言理体田主題意不作用度強公持野以思家世多正安院心界教文元重近考画海売知道集別物使品計死特私始朝運終台広住真有口少町料工建空急止送切転研足究楽起着店病質待試族銀早映親験英医仕去味写字答夜音注帰古歌買悪図週室歩風紙黒花春赤青館屋色走秋夏習駅洋旅服夕借曜飲肉貸堂鳥飯勉冬昼茶弟牛魚兄犬妹姉漢"
 n3_kanji = u"政議民連対部合市内相定回選米実関決全表戦経最現調化当約首法性要制治務成期取都和機平加受続進数記初指権支産点報済活原共得解交資予向際勝面告反判認参利組信在件側任引求所次昨論官増係感情投示変打直両式確果容必演歳争談能位置流格疑過局放常状球職与供役構割費付由説難優夫収断石違消神番規術備宅害配警育席訪乗残想声念助労例然限追商葉伝働形景落好退頭負渡失差末守若種美命福望非観察段横深申様財港識呼達良候程満敗値突光路科積他処太客否師登易速存飛殺号単座破除完降責捕危給苦迎園具辞因馬愛富彼未舞亡冷適婦寄込顔類余王返妻背熱宿薬険頼覚船途許抜便留罪努精散静婚喜浮絶幸押倒等老曲払庭徒勤遅居雑招困欠更刻賛抱犯恐息遠戻願絵越欲痛笑互束似列探逃遊迷夢君閉緒折草暮酒悲晴掛到寝暗盗吸陽御歯忘雪吹娘誤洗慣礼窓昔貧怒祖泳杯疲皆鳴腹煙眠怖耳頂箱晩寒髪忙才靴恥偶偉猫幾"
@@ -82,35 +88,40 @@ elif args.kanji_list == "shiru_1_semester":
 	kanji_list = shiru_1_kanji + shiru_2_kanji + shiru_3_kanji + shiru_4_kanji + shiru_5_kanji + shiru_6_kanji + shiru_7_kanji + shiru_8_kanji + shiru_9_kanji + shiru_10_kanji + shiru_11_kanji	
 elif args.kanji_list == "shiru_all":
 	kanji_list = shiru_1_kanji + shiru_2_kanji + shiru_3_kanji + shiru_4_kanji + shiru_5_kanji + shiru_6_kanji + shiru_7_kanji + shiru_8_kanji + shiru_9_kanji + shiru_10_kanji + shiru_11_kanji + shiru_rest_kanji
-else: kanji_list = args.kanji_list
+else: 
+	kanji_list = args.kanji_list
 
-kanji_list = ''.join(set(re.sub(u"[a-zA-Z0-9()\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f*]", '', kanji_list)))
-
-print "Number of kanji in this set: " + str(len(kanji_list))
+print("Number of kanji in this set: " + str(len(kanji_list)))
 
 levels = ""
 for i in range(1,61):
 	levels += str(i) + ","
 levels = levels[:-1]
 
-r = requests.get("https://www.wanikani.com/api/user/" + api_key + "/kanji/" + levels)
-data=r.json()
-kanji_levels = dict([])
-for i in data["requested_information"]:
-	kanji_levels[i["character"]] = i["level"]
+kanji_by_level = {}
 
-levels_kanji = defaultdict(str)
-not_covered = ""
+url = "https://api.wanikani.com/v2/subjects/?types=kanji"
 
-for i in kanji_list:
-	# print "The kanji " + i + " is level " + str(kanji_levels[i]) + " on WaniKani."
-	if kanji_levels.get(i) != None:
-		levels_kanji[kanji_levels[i]] += i
+next_url = True
+
+while next_url:
+	r = requests.get(url, headers=headers)
+	data = r.json()
+	for i in data["data"]:
+		for j in kanji_list:
+			if i["data"]["characters"] == j:
+				kanji_list = kanji_list.replace(j,"")
+				if i["data"]["level"] in kanji_by_level:
+					kanji_by_level[i["data"]["level"]] += i["data"]["characters"]
+				else:
+					kanji_by_level[i["data"]["level"]] = i["data"]["characters"]
+	if data['pages']['next_url'] != None:
+		url = data['pages']['next_url']
 	else:
-		not_covered += i
+		next_url = False
 
-for i in range(1,61):
-	if len(levels_kanji[i]) > 0:
-		print str(i) + ": " + levels_kanji[i]
-if len(not_covered) > 0:
-	print "Not yet covered: " + not_covered
+kanji_by_level = {k: kanji_by_level[k] for k in sorted(kanji_by_level)}
+kanji_by_level['not yet covered'] = kanji_list
+
+for i in kanji_by_level:
+	print(str(i) + ": " + kanji_by_level[i])
