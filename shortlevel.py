@@ -2,7 +2,6 @@
 
 import requests
 import json
-from collections import defaultdict
 import argparse
 import time
 
@@ -16,26 +15,24 @@ file.close()
 
 headers = {'Authorization': 'Bearer ' + api2_key}
 
-first_wave = defaultdict(str)
-second_wave = defaultdict(str)
+first_wave = {}
+second_wave = {}
 shortlevels = []
 
 for l in range(1,61):
-	time.sleep(5)
+	time.sleep(1)
+	first_wave[l] = ""
+	second_wave[l] = ""
+	radicalids = []
+	r = requests.get("https://api.wanikani.com/v2/subjects/?types=radical&levels=" + str(l), headers=headers)
+	data=r.json()
+	for i in data["data"]:
+		radicalids.append(i['id'])
+
 	r = requests.get("https://api.wanikani.com/v2/subjects/?types=kanji&levels=" + str(l), headers=headers)
 	data=r.json()
 	for i in data["data"]:
-		ids = ""
-		for j in i["data"]["component_subject_ids"]:
-			ids += str(j) + ","
-		ids = ids[:-1]
-		time.sleep(5)
-		s = requests.get("https://api.wanikani.com/v2/subjects/?ids=" + ids, headers=headers)
-		maxlevel = 0
-		for j in s.json()["data"]:	
-			if j["data"]["level"] > maxlevel:
-				maxlevel = j["data"]["level"]
-		if maxlevel == l:
+		if set(i["data"]["component_subject_ids"]).intersection(radicalids):
 			second_wave[l] += i["data"]["characters"]
 		else:
 			first_wave[l] += i["data"]["characters"]
